@@ -1,7 +1,7 @@
 // @flow
 
 import { getFeatureFlag, TILE_VIEW_ENABLED } from '../base/flags';
-import { getPinnedParticipant, getParticipantCount } from '../base/participants';
+import { getPinnedParticipant, getParticipantCount, isLocalParticipantModerator } from '../base/participants';
 import { CHAT_SIZE } from '../chat/constants';
 import {
     ASPECT_RATIO_BREAKPOINT,
@@ -113,6 +113,12 @@ export function getTileViewGridDimensions(state: Object) {
  */
 export function shouldDisplayTileView(state: Object = {}) {
     const participantCount = getParticipantCount(state);
+    
+    // 방장이 아니면 타일뷰로 자동 전환하지 않음
+    const isModerator = isLocalParticipantModerator(state);
+    if (!isModerator) {
+        return false;
+     }
 
     // In case of a lonely meeting, we don't allow tile view.
     // But it's a special case too, as we don't even render the button,

@@ -216,7 +216,7 @@ class WelcomePage extends AbstractWelcomePage {
                                         id = 'enter_room_field'
                                         onChange = { this._onRoomChange }
                                         pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                        placeholder = { this.state.roomPlaceholder }
+                                        placeholder = { '화상교육 이름을 입력하세요.' }
                                         ref = { this._setRoomInputRef }
                                         title = { t('welcomepage.roomNameAllowedChars') }
                                         type = 'text'

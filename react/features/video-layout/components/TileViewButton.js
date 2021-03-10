@@ -9,7 +9,7 @@ import {
 import { TILE_VIEW_ENABLED, getFeatureFlag } from '../../base/flags';
 import { translate } from '../../base/i18n';
 import { IconTileView } from '../../base/icons';
-import { getParticipantCount } from '../../base/participants';
+import { getParticipantCount, isLocalParticipantModerator } from '../../base/participants';
 import { connect } from '../../base/redux';
 import { AbstractButton, type AbstractButtonProps } from '../../base/toolbox/components';
 import { setTileView } from '../actions';
@@ -88,7 +88,9 @@ class TileViewButton<P: Props> extends AbstractButton<P, *> {
 function _mapStateToProps(state, ownProps) {
     const enabled = getFeatureFlag(state, TILE_VIEW_ENABLED, true);
     const lonelyMeeting = getParticipantCount(state) < 2;
-    const { visible = enabled && !lonelyMeeting } = ownProps;
+    // 방장만 타일뷰 버튼 보이게 함
+    const isModerator = isLocalParticipantModerator(state);
+    const { visible = enabled && !lonelyMeeting && isModerator} = ownProps;
 
     return {
         _tileViewEnabled: shouldDisplayTileView(state),
