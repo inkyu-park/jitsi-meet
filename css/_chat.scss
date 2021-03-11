@@ -1,5 +1,6 @@
 #sideToolbarContainer {
-    background-color: $newToolbarBackgroundColor;
+    //background-color: $newToolbarBackgroundColor;
+    background-color: rgba(255, 255, 255, 0);
     box-sizing: border-box;
     color: #FFF;
     display: flex;
@@ -10,7 +11,8 @@
     position: absolute;
     top: 0;
     width: $sidebarWidth;
-    z-index: $sideToolbarContainerZ;
+    //z-index: $sideToolbarContainerZ;
+    z-index: 600;
 
     /**
      * The sidebar (chat) is off-screen when hidden. Move it flush to the left
@@ -29,7 +31,8 @@
     overflow: auto;
     padding: 16px;
     text-align: left;
-    width: $sidebarWidth;
+    //width: $sidebarWidth;
+    width: 100%;
     word-wrap: break-word;
 
     display: flex;
@@ -62,6 +65,7 @@
     &::-webkit-scrollbar {
         background: #06a5df;
         width: 7px;
+        display: none;
     }
 
     &::-webkit-scrollbar-button {
@@ -110,7 +114,8 @@
     position: relative;
     width: 100%;
     z-index: 1;
-    display: flex;
+    //display: flex;
+    display: none;
     justify-content: space-between;
     padding: 16px;
     align-items: center;
@@ -355,7 +360,8 @@
     max-height: 0;
     overflow: hidden;
     position: absolute;
-    width: $sidebarWidth;
+    //width: $sidebarWidth;
+    width: 100%;
 
     /**
      * CSS transitions do not apply for auto dimensions. So to produce the css
