@@ -3,20 +3,21 @@ import 'jquery';
 import { setConfigFromURLParams } from '../../react/features/base/config/functions';
 import { parseURLParams } from '../../react/features/base/util/parseURLParams';
 import { parseURIString } from '../../react/features/base/util/uri';
+import { validateLastNLimits, limitLastN } from '../../react/features/base/lastn/functions';
 
 setConfigFromURLParams(config, {}, {}, window.location);
 
 const params = parseURLParams(window.location, false, 'hash');
 const { isHuman = false } = params;
 const {
-    localAudio = config.startWithAudioMuted !== true,
     localVideo = config.startWithVideoMuted !== true,
     remoteVideo = isHuman,
     remoteAudio = isHuman,
     autoPlayVideo = config.testing.noAutoPlayVideo !== true,
+} = params;
 
-    // Whether to create local audio even if muted
-    autoCreateLocalAudio = config.testing.noAutoLocalAudio !== true
+let {
+    localAudio = config.startWithAudioMuted !== true,
 } = params;
 
 const { room: roomName } = parseURIString(window.location.toString());
@@ -39,6 +40,24 @@ window.APP = {
         },
         getConnectionState() {
             return room && room.getConnectionState();
+        },
+        muteAudio(mute) {
+            localAudio = mute;
+            for (let i = 0; i < localTracks.length; i++) {
+                if (localTracks[i].getType() === 'audio') {
+                    if (mute) {
+                        localTracks[i].mute();
+                    }
+                    else {
+                        localTracks[i].unmute();
+
+                        // if track was not added we need to add it to the peerconnection
+                        if (!room.getLocalAudioTrack()) {
+                            room.replaceTrack(null, localTracks[i]);
+                        }
+                    }
+                }
+            }
         }
     },
 
@@ -90,11 +109,34 @@ function updateMaxFrameHeight() {
 }
 
 /**
+ * Simple emulation of jitsi-meet's lastN behavior
+ */
+function updateLastN() {
+    let lastN = typeof config.channelLastN === 'undefined' ? -1 : config.channelLastN;
+
+    const limitedLastN = limitLastN(numParticipants, validateLastNLimits(config.lastNLimits));
+
+    if (limitedLastN !== undefined) {
+        lastN = lastN === -1 ? limitedLastN : Math.min(limitedLastN, lastN);
+    }
+
+    if (lastN === room.getLastN()) {
+        return;
+    }
+
+    room.setLastN(lastN);
+}
+
+/**
  *
  */
 function setNumberOfParticipants() {
     $('#participants').text(numParticipants);
+    /* jitsi-meet's current Tile View behavior. */
+    const ids = room.getParticipants().map(participant => participant.id);
+    room.selectParticipants(ids);
     updateMaxFrameHeight();
+    updateLastN();
 }
 
 /**
@@ -107,8 +149,12 @@ function onLocalTracks(tracks = []) {
         if (localTracks[i].getType() === 'video') {
             $('body').append(`<video ${autoPlayVideo ? 'autoplay="1" ' : ''}id='localVideo${i}' />`);
             localTracks[i].attach($(`#localVideo${i}`)[0]);
+
+            room.addTrack(localTracks[i]);
         } else {
-            if (!localAudio) {
+            if (localAudio) {
+                room.addTrack(localTracks[i]);
+            } else {
                 localTracks[i].mute();
             }
 
@@ -116,7 +162,6 @@ function onLocalTracks(tracks = []) {
                 `<audio autoplay='1' muted='true' id='localAudio${i}' />`);
             localTracks[i].attach($(`#localAudio${i}`)[0]);
         }
-        room.addTrack(localTracks[i]);
     }
 }
 
@@ -177,6 +222,16 @@ function onStartMuted() {
  *
  * @param id
  */
+function onUserJoined(id) {
+    numParticipants++;
+    setNumberOfParticipants();
+    remoteTracks[id] = [];
+}
+
+/**
+ *
+ * @param id
+ */
 function onUserLeft(id) {
     numParticipants--;
     setNumberOfParticipants();
@@ -203,11 +258,7 @@ function onConnectionSuccess() {
     room.on(JitsiMeetJS.events.conference.STARTED_MUTED, onStartMuted);
     room.on(JitsiMeetJS.events.conference.TRACK_ADDED, onRemoteTrack);
     room.on(JitsiMeetJS.events.conference.CONFERENCE_JOINED, onConferenceJoined);
-    room.on(JitsiMeetJS.events.conference.USER_JOINED, id => {
-        numParticipants++;
-        setNumberOfParticipants();
-        remoteTracks[id] = [];
-    });
+    room.on(JitsiMeetJS.events.conference.USER_JOINED, onUserJoined);
     room.on(JitsiMeetJS.events.conference.USER_LEFT, onUserLeft);
 
     const devices = [];
@@ -216,9 +267,8 @@ function onConnectionSuccess() {
         devices.push('video');
     }
 
-    if (localAudio || autoCreateLocalAudio) {
-        devices.push('audio');
-    }
+    // we always create audio local tracks
+    devices.push('audio');
 
     if (devices.length > 0) {
         JitsiMeetJS.createLocalTracks({ devices })

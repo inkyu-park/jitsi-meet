@@ -1,8 +1,7 @@
 // @flow
 
 import React from 'react';
-import { NativeModules, SafeAreaView, StatusBar } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { NativeModules, SafeAreaView, StatusBar, View } from 'react-native';
 
 import { appNavigate } from '../../../app/actions';
 import { PIP_ENABLED, FULLSCREEN_ENABLED, getFeatureFlag } from '../../../base/flags';
@@ -34,10 +33,9 @@ import {
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
-import Labels from './Labels';
 import LonelyMeetingExperience from './LonelyMeetingExperience';
 import NavigationBar from './NavigationBar';
-import styles, { NAVBAR_GRADIENT_COLORS } from './styles';
+import styles from './styles';
 
 
 /**
@@ -238,17 +236,11 @@ class Conference extends AbstractConference<Props, *> {
      */
     _renderContent() {
         const {
-            _aspectRatio,
             _connecting,
-            _filmstripVisible,
             _largeVideoParticipantId,
             _reducedUI,
-            _shouldDisplayTileView,
-            _toolboxVisible
+            _shouldDisplayTileView
         } = this.props;
-        const showGradient = _toolboxVisible;
-        const applyGradientStretching
-            = _filmstripVisible && _aspectRatio === ASPECT_RATIO_NARROW && !_shouldDisplayTileView;
 
         if (_reducedUI) {
             return this._renderContentForReducedUi();
@@ -280,27 +272,9 @@ class Conference extends AbstractConference<Props, *> {
                         </TintedView>
                 }
 
-                <SafeAreaView
+                <View
                     pointerEvents = 'box-none'
                     style = { styles.toolboxAndFilmstripContainer }>
-
-                    { showGradient && <LinearGradient
-                        colors = { NAVBAR_GRADIENT_COLORS }
-                        end = {{
-                            x: 0.0,
-                            y: 0.0
-                        }}
-                        pointerEvents = 'none'
-                        start = {{
-                            x: 0.0,
-                            y: 1.0
-                        }}
-                        style = { [
-                            styles.bottomGradient,
-                            applyGradientStretching ? styles.gradientStretchBottom : undefined
-                        ] } />}
-
-                    <Labels />
 
                     <Captions onPress = { this._onClick } />
 
@@ -310,22 +284,9 @@ class Conference extends AbstractConference<Props, *> {
 
                     <LonelyMeetingExperience />
 
-                    {/*
-                      * The Toolbox is in a stacking layer below the Filmstrip.
-                      */}
+                    { _shouldDisplayTileView ? undefined : <Filmstrip /> }
                     <Toolbox />
-
-                    {/*
-                      * The Filmstrip is in a stacking layer above the
-                      * LargeVideo. The LargeVideo and the Filmstrip form what
-                      * the Web/React app calls "videospace". Presumably, the
-                      * name and grouping stem from the fact that these two
-                      * React Components depict the videos of the conference's
-                      * participants.
-                      */
-                        _shouldDisplayTileView ? undefined : <Filmstrip />
-                    }
-                </SafeAreaView>
+                </View>
 
                 <SafeAreaView
                     pointerEvents = 'box-none'

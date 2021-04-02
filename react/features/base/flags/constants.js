@@ -11,13 +11,19 @@ export const ADD_PEOPLE_ENABLED = 'add-people.enabled';
  * Used by apps that do not use Jitsi audio.
  * Default: disabled (false)
  */
-export const ANDROID_AUDIO_FOCUS_DISABLED = 'android.audio-focus.disabled';
+export const AUDIO_FOCUS_DISABLED = 'audio-focus.disabled';
 
 /**
  * Flag indicating if the audio mute button should be displayed.
  * Default: enabled (true).
  */
 export const AUDIO_MUTE_BUTTON_ENABLED = 'audio-mute.enabled';
+
+/**
+ * Flag indicating that the Audio only button in the overflow menu is enabled.
+ * Default: enabled (true).
+ */
+export const AUDIO_ONLY_BUTTON_ENABLED = 'audio-only.enabled';
 
 /**
  * Flag indicating if calendar integration should be enabled.
@@ -100,7 +106,7 @@ export const MEETING_NAME_ENABLED = 'meeting-name.enabled';
 
 /**
  * Flag indicating if the meeting password button should be enabled.
- * Note that this flag just decides on the buttton, if a meeting has a password
+ * Note that this flag just decides on the button, if a meeting has a password
  * set, the password ddialog will still show up.
  * Default: enabled (true).
  */
