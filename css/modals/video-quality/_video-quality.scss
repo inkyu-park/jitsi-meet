@@ -102,6 +102,7 @@
         .video-quality-dialog-label {
             display: table-caption;
             word-spacing: unset;
+            word-break: keep-all;
         }
     }
 }
