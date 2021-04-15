@@ -179,7 +179,7 @@
         "conferenceReloadMsg": "문제를 해결하려고 노력하고 있습니다. {{seconds}} 초 안에 다시 연결중입니다.",
         "conferenceReloadTitle": "불행하게도 문제가 발생했습니다",
         "confirm": "확인",
-        "confirmNo": "아니요",
+        "confirmNo": "아니오",
         "confirmYes": "예",
         "connectError": "죄송합니다. 문제가 발생하여 회의에 연결할 수 없습니다",
         "connectErrorWithMsg": "죄송합니다. 뭔가 잘못되어 회의에 연결할 수 없습니다: {{msg}}",
