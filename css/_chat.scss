@@ -11,6 +11,7 @@
     position: absolute;
     top: 0;
     width: $sidebarWidth;
+    min-width: 150px;
     //z-index: $sideToolbarContainerZ;
     z-index: 600;
 
@@ -162,7 +163,7 @@
     border-radius: 3px;
 
     &:focus-within {
-        border: 1px solid #619CF4;
+        border: 1px solid #ffab00;
     }
 
     * {
@@ -179,8 +180,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     border-radius: 3px;
 
     path {
@@ -192,8 +193,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     border-radius: 3px;
 }
 
@@ -219,11 +220,17 @@
     box-shadow: none;
     color: white;
     font-size: 14px;
-    padding: 10px;
+    padding: 10px 5px 10px 5px;
     overflow-y: auto;
     resize: none;
     width: 100%;
     word-break: break-word;
+}
+
+#usermsg::placeholder {
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: hidden;
 }
 
 #usermsg:hover {
@@ -292,8 +299,9 @@
     }
 
     .display-name {
-        font-size: 12px;
-        font-weight: 600;
+        font-family: Malgun Gothic;
+        font-size: 14px;
+        font-weight: 500;
         margin-bottom: 5px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -309,7 +317,7 @@
     background-color: $chatRemoteMessageBackgroundColor;
     border-radius: 0px 6px 6px 6px;
     box-sizing: border-box;
-    color: white;
+    color: black;
     margin-top: 3px;
     max-width: 100%;
     position: relative;
@@ -389,7 +397,7 @@
     max-height: 0;
     overflow: hidden;
     position: absolute;
-    width: 100%;
+    width: 170px;
     margin-bottom: 5px;
     margin-left: -5px;
 
@@ -497,7 +505,7 @@
         border-radius: 0px 6px 6px 6px;
         display: inline-block;
         margin-top: 3px;
-        color: white;
+        color: black;
 
         &.privatemessage {
             background-color: $chatPrivateMessageBackgroundColor;

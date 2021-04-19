@@ -93,10 +93,10 @@ $modalTextColor: #333;
 $chatActionsSeparatorColor: rgb(173, 105, 112);
 $chatBackgroundColor: #131519;
 $chatInputSeparatorColor: #A4B8D1;
-$chatLocalMessageBackgroundColor: #484A4F;
-$chatPrivateMessageBackgroundColor: rgb(153, 69, 77);
-$chatRemoteMessageBackgroundColor:  #242528;
-$sidebarWidth: calc(20%);
+$chatLocalMessageBackgroundColor: rgb(255, 171, 0);
+$chatPrivateMessageBackgroundColor: rgb(255, 144, 155);
+$chatRemoteMessageBackgroundColor:  #dddddd;
+$sidebarWidth: calc(15%);
 
  /**
  * Misc.
