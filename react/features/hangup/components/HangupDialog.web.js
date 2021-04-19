@@ -33,16 +33,7 @@ export default class HangupDialog extends Component {
 
     _onSubmit: () => void;
 
-    // _onCancel() {
-    //     return true;
-    // }
-
     _onSubmit() {
-        //window.alert("제발");
-        document.location.href = "https://live-learning.hwgeneralins.com/custom_index.html";
-        //window.opener = null;
-        //window.open("about:blank", "_self");
-        //window.close();
-        //_extDoHangup();
+        document.location.href = "https://live-learning.hwgeneralins.com/";
     }
 }
