@@ -635,13 +635,13 @@ class SharedVideoContainer extends LargeContainer {
     resize(containerWidth, containerHeight) {
         let height, width;
 
-        if (interfaceConfig.VERTICAL_FILMSTRIP) {
-            height = containerHeight - getToolboxHeight();
-            width = containerWidth - Filmstrip.getVerticalFilmstripWidth();
-        } else {
-            height = containerHeight - Filmstrip.getFilmstripHeight();
-            width = containerWidth;
-        }
+        // if (interfaceConfig.VERTICAL_FILMSTRIP) {
+        //     height = containerHeight - getToolboxHeight();
+        //     width = containerWidth - Filmstrip.getVerticalFilmstripWidth();
+        // } else {
+        //     height = containerHeight - Filmstrip.getFilmstripHeight();
+        //     width = containerWidth;
+        // }
 
         this.$iframe.width(width).height(height);
     }
