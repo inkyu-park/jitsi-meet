@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>한화손해보험-비대면 업무시스템</title>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <script type="text/javascript">
+
+    function checkRoomName (args) {
+        // roomName이 https://live-~~~~ 또는 live-~~~~~~ 형태인지 체크해 방 이름만 리턴
+        return args;
+    }
+
+    function openLiveMeeting() {
+        var liveMeetingForm = document.liveMeetingForm;
+        var roomName = liveMeetingForm.roomName.value;
+        //var userInfo = encodeURIComponent(window.location.pathname);
+        var url = "https://live-meeting.hwgeneralins.com/" + roomName;
+        //url = url + "#userInfo.displayName=" + userInfo;
+        if (window.navigator.userAgent.match(/(MSIE|Trident)/)) {
+            try {
+                var shell = new ActiveXObject("WScript.Shell");
+                shell.run("start chrome " + url);
+            }
+            catch(e) {
+                alert("크롬이 설치되어 있지 않습니다.\n상단 링크를 통해 크롬 브라우저 설치 후 연결하십시오.");
+            }  
+        }
+        else {
+            // 크롬 브라우저에서는 새창이 아닌 현재창에서 이동
+            //window.open(url, "", "_blank")
+            document.location.href = url;
+        }
+    }
+
+    function openLiveLearning() {
+        var liveLearningForm = document.liveLearningForm;
+        var roomName = liveLearningForm.roomName.value;
+        var url = "https://live-learning.hwgeneralins.com/" + roomName;
+        if (window.navigator.userAgent.match(/(MSIE|Trident)/)) {
+            var shell = new ActiveXObject("WScript.Shell");
+            var runProgram = "chrome.exe https://live-learning.hwgeneralins.com/" + roomName;
+            try {
+                var retVal = shell.run(runProgram, 1, true);
+            }
+            catch(e) {
+                alert("크롬이 설치되어 있지 않습니다.\n상단 링크를 통해 크롬 브라우저 설치 후 연결하십시오.");
+            }
+        }
+        else {
+            // 크롬 브라우저에서는 새창이 아닌 현재창에서 이동
+            //window.open(url, "", "_blank")
+            document.location.href = url;
+        }
+    }
+    </script>
+</head>
+<body>
+<input type="button" value="크롬 다운로드">
+<input type="button" value="사용 가이드">
+<input type="button" value="바탕화면 바로가기">
+<form name="liveMeetingForm">
+<input type="text" name="roomName" placeholder="회의실 이름을 입력하세요">
+<input type="hidden" name="userInfo">
+<input type="button" onclick="openLiveMeeting()" value="연결">
+</form>
+<form name="liveLearningForm">
+<input type="text" name="roomName" placeholder="교육장 이름을 입력하세요">
+<input type="button" onclick="openLiveLearning()" value="연결">
+</form>
+</body>
+</html>
