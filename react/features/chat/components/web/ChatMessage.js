@@ -26,10 +26,10 @@ class ChatMessage extends AbstractChatMessage<Props> {
             <div
                 className = 'chatmessage-wrapper'
                 tabIndex = { -1 }>
+                { this.props.showDisplayName && this._renderDisplayName() }
                 <div className = { `chatmessage ${message.privateMessage ? 'privatemessage' : ''}` }>
                     <div className = 'replywrapper'>
                         <div className = 'messagecontent'>
-                            { this.props.showDisplayName && this._renderDisplayName() }
                             <div className = 'usermessage'>
                                 <span className = 'sr-only'>
                                     { this.props.message.displayName === this.props.message.recipient

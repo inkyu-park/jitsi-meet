@@ -6,7 +6,8 @@ import {
     getPinnedParticipant,
     getParticipantCount,
     pinParticipant,
-    getParticipantCountWithFake
+    getParticipantCountWithFake,
+    isLocalParticipantModerator
 } from '../base/participants';
 import { shouldHideSelfView } from '../base/settings/functions.any';
 import {
@@ -135,6 +136,12 @@ export function shouldDisplayTileView(state: Object = {}) {
 
     const tileViewEnabledFeatureFlag = getFeatureFlag(state, TILE_VIEW_ENABLED, true);
     const { disableTileView } = state['features/base/config'];
+
+    // 방장이 아니면 타일뷰로 자동 전환하지 않음
+    const isModerator = isLocalParticipantModerator(state);
+    if (!isModerator) {
+        return false;
+    }
 
     if (disableTileView || !tileViewEnabledFeatureFlag) {
         return false;

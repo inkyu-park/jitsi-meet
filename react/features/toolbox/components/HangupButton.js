@@ -8,6 +8,8 @@ import { disconnect } from '../../base/connection';
 import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
 import { AbstractHangupButton } from '../../base/toolbox/components';
+import { openDialog } from '../../base/dialog';
+import { HangupDialog } from '../../hangup';
 import type { AbstractButtonProps } from '../../base/toolbox/components';
 
 /**
@@ -62,7 +64,8 @@ class HangupButton extends AbstractHangupButton<Props, *> {
      * @returns {void}
      */
     _doHangup() {
-        this._hangup();
+        // this._hangup();
+        this.props.dispatch(openDialog(HangupDialog));
     }
 }
 

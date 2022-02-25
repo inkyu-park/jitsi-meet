@@ -107,6 +107,15 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
+.toolbox-name {
+    height: 20px;
+}
+
+.toolbox-name-text {
+    font-size: 11px;
+    color:#fff;
+}
+
 .beta-tag {
     background: #36383C;
     border-radius: 3px;

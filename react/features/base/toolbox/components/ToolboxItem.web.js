@@ -80,7 +80,8 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
         };
 
         const elementType = showLabel ? 'li' : 'div';
-        const useTooltip = this.tooltip && this.tooltip.length > 0;
+        // const useTooltip = this.tooltip && this.tooltip.length > 0;
+        const useTooltip = false;
         let children = (
             <Fragment>
                 { this._renderIcon() }
@@ -88,6 +89,9 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
                     { this.label }
                 </span> }
                 { elementAfter }
+                { !showLabel && 
+                    <div class="toolbox-name"><span class="toolbox-name-text">{ this.accessibilityLabel }</span></div>
+                }
             </Fragment>
         );
 
