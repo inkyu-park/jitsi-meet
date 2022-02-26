@@ -19,6 +19,7 @@ import { getAutoPinSetting, updateAutoPinnedParticipant } from './functions';
 import './subscriber';
 
 let previousTileViewEnabled;
+let previousPinnedParticipant;
 
 /**
  * Middleware which intercepts actions and updates tile view related state.
@@ -67,8 +68,19 @@ MiddlewareRegistry.register(store => next => action => {
 
     // Things to update when tile view state changes
     case SET_TILE_VIEW:
-        if (action.enabled && getPinnedParticipant(store)) {
+        // if (action.enabled && getPinnedParticipant(store)) {
+        //     store.dispatch(pinParticipant(null));
+        // }
+        if (action.enabled) {
+            if(getPinnedParticipant(store) !== undefined) {
+                previousPinnedParticipant = getPinnedParticipant(store);
+            }
             store.dispatch(pinParticipant(null));
+        }
+        else {
+            if(!getPinnedParticipant(store) && previousPinnedParticipant !== undefined) {
+                store.dispatch(pinParticipant(previousPinnedParticipant.id));
+            }
         }
     }
 

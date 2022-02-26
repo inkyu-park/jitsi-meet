@@ -7,7 +7,8 @@ import {
     getDominantSpeakerParticipant,
     getLocalParticipant,
     getPinnedParticipant,
-    getRemoteParticipants
+    getRemoteParticipants,
+    isParticipantModerator
 } from '../base/participants';
 
 import {
@@ -110,43 +111,55 @@ function _electParticipantInLargeVideo(state) {
         return participant.id;
     }
 
-    // 2. Next, pick the most recent remote screenshare that was added to the conference.
-    const remoteScreenShares = state['features/video-layout'].remoteScreenShares;
-
-    if (remoteScreenShares?.length) {
-        return remoteScreenShares[remoteScreenShares.length - 1];
+    // 참가자 목록 for 루프 돌려서 moderator 역할인 참가자 return
+    const participants = [ ...getRemoteParticipants(state).values() ];
+    let participantCnt = participants.length;
+    for(let i = 0; i < participantCnt; i++) {
+        const p = participants[i];
+        //
+        if(isParticipantModerator(p)) {
+            //
+            return p.id;
+        }
     }
+
+    // 2. Next, pick the most recent remote screenshare that was added to the conference.
+    // const remoteScreenShares = state['features/video-layout'].remoteScreenShares;
+
+    // if (remoteScreenShares?.length) {
+    //     return remoteScreenShares[remoteScreenShares.length - 1];
+    // }
 
     // 3. Next, pick the dominant speaker (other than self).
-    participant = getDominantSpeakerParticipant(state);
-    if (participant && !participant.local) {
-        return participant.id;
-    }
+    // participant = getDominantSpeakerParticipant(state);
+    // if (participant && !participant.local) {
+    //     return participant.id;
+    // }
 
     // In case this is the local participant.
-    participant = undefined;
+    // participant = undefined;
 
     // 4. Next, pick the most recent participant with video.
-    const tracks = state['features/base/tracks'];
-    const videoTrack = _electLastVisibleRemoteVideo(tracks);
+    // const tracks = state['features/base/tracks'];
+    // const videoTrack = _electLastVisibleRemoteVideo(tracks);
 
-    if (videoTrack) {
-        return videoTrack.participantId;
-    }
+    // if (videoTrack) {
+    //     return videoTrack.participantId;
+    // }
 
     // 5. As a last resort, select the participant that joined last (other than poltergist or other bot type
     // participants).
 
-    const participants = [ ...getRemoteParticipants(state).values() ];
+    // const participants = [ ...getRemoteParticipants(state).values() ];
 
-    for (let i = participants.length; i > 0 && !participant; i--) {
-        const p = participants[i - 1];
+    // for (let i = participants.length; i > 0 && !participant; i--) {
+    //     const p = participants[i - 1];
 
-        !p.botType && (participant = p);
-    }
-    if (participant) {
-        return participant.id;
-    }
+    //     !p.botType && (participant = p);
+    // }
+    // if (participant) {
+    //     return participant.id;
+    // }
 
     return getLocalParticipant(state)?.id;
 }

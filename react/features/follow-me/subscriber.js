@@ -1,14 +1,31 @@
 // @flow
 
-import { getCurrentConference } from '../base/conference';
+import { getCurrentConference, setFollowMe } from '../base/conference';
 import {
     getPinnedParticipant,
-    isLocalParticipantModerator
+    isLocalParticipantModerator,
+    getParticipantCount,
+    getLocalParticipant,
+    pinParticipant
 } from '../base/participants';
 import { StateListenerRegistry } from '../base/redux';
 import { shouldDisplayTileView } from '../video-layout/functions';
 
 import { FOLLOW_ME_COMMAND } from './constants';
+
+StateListenerRegistry.register(
+    /* selector */ state => isLocalParticipantModerator(state),
+    /* listener */ (isModerator, { dispatch, getState }) => {
+        //const isModerator = isLocalParticipantModerator(store.getState());
+        const participantCount = getParticipantCount(getState());
+        // 내가 moder이고, 참여자가 1명이면
+        if(isModerator && participantCount === 1) {
+            const localParticipantId = getLocalParticipant(getState()).id;
+            dispatch(setFollowMe(true));
+            dispatch(pinParticipant(localParticipantId));
+        }
+    }
+);
 
 /**
  * Subscribes to changes to the Follow Me setting for the local participant to

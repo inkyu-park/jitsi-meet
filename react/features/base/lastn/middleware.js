@@ -2,7 +2,7 @@
 
 import debounce from 'lodash/debounce';
 
-import { SET_FILMSTRIP_ENABLED } from '../../filmstrip/actionTypes';
+import { SET_FILMSTRIP_ENABLED, SET_FILMSTRIP_VISIBLE } from '../../filmstrip/actionTypes';
 import { SELECT_LARGE_VIDEO_PARTICIPANT } from '../../large-video/actionTypes';
 import { APP_STATE_CHANGED } from '../../mobile/background/actionTypes';
 import { SCREEN_SHARE_REMOTE_PARTICIPANTS_UPDATED, SET_TILE_VIEW } from '../../video-layout/actionTypes';
@@ -11,7 +11,8 @@ import { CONFERENCE_JOINED } from '../conference/actionTypes';
 import {
     PARTICIPANT_JOINED,
     PARTICIPANT_KICKED,
-    PARTICIPANT_LEFT
+    PARTICIPANT_LEFT,
+    PIN_PARTICIPANT
 } from '../participants/actionTypes';
 import {
     getParticipantById,
@@ -43,7 +44,7 @@ const _updateLastN = debounce(({ dispatch, getState }) => {
 
     const { enabled: audioOnly } = state['features/base/audio-only'];
     const { appState } = state['features/background'] || {};
-    const { enabled: filmStripEnabled } = state['features/filmstrip'];
+    const { visible } = state['features/filmstrip'];
     const config = state['features/base/config'];
     const { lastNLimits, lastN } = state['features/base/lastn'];
     const participantCount = getParticipantCount(state);
@@ -58,18 +59,21 @@ const _updateLastN = debounce(({ dispatch, getState }) => {
     // Apply last N limit based on the # of participants and config settings.
     const limitedLastN = limitLastN(participantCount, lastNLimits);
 
+    const { remoteScreenShares, tileViewEnabled } = state['features/video-layout'];
+    const largeVideoParticipantId = state['features/large-video'].participantId;
+    const largeVideoParticipant
+        = largeVideoParticipantId ? getParticipantById(state, largeVideoParticipantId) : undefined;
+
     if (limitedLastN !== undefined) {
         lastNSelected = lastNSelected === -1 ? limitedLastN : Math.min(limitedLastN, lastNSelected);
     }
 
+    console.log("@@@@@visible : " + visible);
+    console.log("@@@@@tileViewEnabled : " + tileViewEnabled);
+
     if (typeof appState !== 'undefined' && appState !== 'active') {
         lastNSelected = isLocalVideoTrackDesktop(state) ? 1 : 0;
     } else if (audioOnly) {
-        const { remoteScreenShares, tileViewEnabled } = state['features/video-layout'];
-        const largeVideoParticipantId = state['features/large-video'].participantId;
-        const largeVideoParticipant
-            = largeVideoParticipantId ? getParticipantById(state, largeVideoParticipantId) : undefined;
-
         // Use tileViewEnabled state from redux here instead of determining if client should be in tile
         // view since we make an exception only for screenshare when in audio-only mode. If the user unpins
         // the screenshare, lastN will be set to 0 here. It will be set to 1 if screenshare has been auto pinned.
@@ -78,9 +82,12 @@ const _updateLastN = debounce(({ dispatch, getState }) => {
         } else {
             lastNSelected = 0;
         }
-    } else if (!filmStripEnabled) {
+    } else if (!visible && !tileViewEnabled) {
         lastNSelected = 1;
+    } else {
+        lastNSelected = 150;
     }
+    console.log("@@@@@lastNSelected : " + lastNSelected);
 
     dispatch(setLastN(lastNSelected));
 }, 1000); /* Don't send this more often than once a second. */
@@ -99,7 +106,9 @@ MiddlewareRegistry.register(store => next => action => {
     case SELECT_LARGE_VIDEO_PARTICIPANT:
     case SET_AUDIO_ONLY:
     case SET_FILMSTRIP_ENABLED:
+    case SET_FILMSTRIP_VISIBLE:
     case SET_TILE_VIEW:
+    case PIN_PARTICIPANT:
         _updateLastN(store);
         break;
     }

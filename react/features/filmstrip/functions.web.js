@@ -76,19 +76,20 @@ export function shouldRemoteVideosBeVisible(state: Object) {
     const { disable1On1Mode } = state['features/base/config'];
     const { contextMenuOpened } = state['features/base/responsive-ui'];
 
-    return Boolean(
-        contextMenuOpened
-            || participantCount > 2
+    // return Boolean(
+    //     contextMenuOpened
+    //         || participantCount > 2
 
-            // Always show the filmstrip when there is another participant to
-            // show and the  local video is pinned, or the toolbar is displayed.
-            || (participantCount > 1
-                && disable1On1Mode !== null
-                && (state['features/toolbox'].visible
-                    || ((pinnedParticipant = getPinnedParticipant(state))
-                        && pinnedParticipant.local)))
+    //         // Always show the filmstrip when there is another participant to
+    //         // show and the  local video is pinned, or the toolbar is displayed.
+    //         || (participantCount > 1
+    //             && disable1On1Mode !== null
+    //             && (state['features/toolbox'].visible
+    //                 || ((pinnedParticipant = getPinnedParticipant(state))
+    //                     && pinnedParticipant.local)))
 
-            || disable1On1Mode);
+    //         || disable1On1Mode);
+    return false;
 }
 
 /**

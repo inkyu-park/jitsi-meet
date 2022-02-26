@@ -63,21 +63,24 @@ class SharedVideo extends Component<Props> {
         let width;
         let height;
 
-        if (interfaceConfig.VERTICAL_FILMSTRIP) {
-            if (filmstripVisible) {
-                width = `${clientWidth - Filmstrip.getVerticalFilmstripWidth()}px`;
-            } else {
-                width = `${clientWidth}px`;
-            }
-            height = `${clientHeight - getToolboxHeight()}px`;
-        } else {
-            if (filmstripVisible) {
-                height = `${clientHeight - Filmstrip.getFilmstripHeight()}px`;
-            } else {
-                height = `${clientHeight}px`;
-            }
-            width = `${clientWidth}px`;
-        }
+        // if (interfaceConfig.VERTICAL_FILMSTRIP) {
+        //     if (filmstripVisible) {
+        //         width = `${clientWidth - Filmstrip.getVerticalFilmstripWidth()}px`;
+        //     } else {
+        //         width = `${clientWidth}px`;
+        //     }
+        //     height = `${clientHeight - getToolboxHeight()}px`;
+        // } else {
+        //     if (filmstripVisible) {
+        //         height = `${clientHeight - Filmstrip.getFilmstripHeight()}px`;
+        //     } else {
+        //         height = `${clientHeight}px`;
+        //     }
+        //     width = `${clientWidth}px`;
+        // }
+
+        width = `${clientWidth}px`;
+        height = `${clientHeight}px`;
 
         return {
             width,

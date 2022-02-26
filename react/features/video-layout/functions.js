@@ -138,10 +138,10 @@ export function shouldDisplayTileView(state: Object = {}) {
     const { disableTileView } = state['features/base/config'];
 
     // 방장이 아니면 타일뷰로 자동 전환하지 않음
-    const isModerator = isLocalParticipantModerator(state);
-    if (!isModerator) {
-        return false;
-    }
+    // const isModerator = isLocalParticipantModerator(state);
+    // if (!isModerator) {
+    //     return false;
+    // }
 
     if (disableTileView || !tileViewEnabledFeatureFlag) {
         return false;
@@ -170,7 +170,9 @@ export function shouldDisplayTileView(state: Object = {}) {
         || getPinnedParticipant(state)
 
         // It's a 1-on-1 meeting
-        || participantCount < 3
+        // || participantCount < 3
+        // 무조건 true로 리턴
+        || true
 
         // There is a shared YouTube video in the meeting
         || isVideoPlaying(state)

@@ -11,7 +11,8 @@ import { MEDIA_TYPE, VideoTrack } from '../../../base/media';
 import {
     getParticipantByIdOrUndefined,
     hasRaisedHand,
-    pinParticipant
+    pinParticipant,
+    isLocalParticipantModerator
 } from '../../../base/participants';
 import { connect } from '../../../base/redux';
 import { ASPECT_RATIO_NARROW } from '../../../base/responsive-ui/constants';
@@ -188,6 +189,8 @@ export type Props = {|
      * The ID of the participant related to the thumbnail.
      */
     participantID: ?string,
+
+    _isLocalParticipantModerator: Boolean,
 
     /**
      * Styles that will be set to the Thumbnail's main span element.
@@ -544,10 +547,13 @@ class Thumbnail extends Component<Props, State> {
      * @returns {void}
      */
     _onClick() {
-        const { _participant, dispatch } = this.props;
+        const { _participant, dispatch, _isLocalParticipantModerator } = this.props;
         const { id, pinned } = _participant;
 
-        dispatch(pinParticipant(pinned ? null : id));
+        if(_isLocalParticipantModerator) {
+            // dispatch(pinParticipant(pinned ? null : id));
+            dispatch(pinParticipant(id));
+        }
     }
 
     _onMouseEnter: () => void;
@@ -975,6 +981,7 @@ function _mapStateToProps(state, ownProps): Object {
         _participant: participant,
         _raisedHand: hasRaisedHand(participant),
         _videoTrack,
+        _isLocalParticipantModerator: isLocalParticipantModerator(state),
         ...size
     };
 }

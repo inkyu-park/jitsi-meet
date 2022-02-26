@@ -90,7 +90,7 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
                 </span> }
                 { elementAfter }
                 { !showLabel && 
-                    <div class="toolbox-name"><span class="toolbox-name-text">{ this.accessibilityLabel }</span></div>
+                    <div class="toolbox-name"><span class="toolbox-name-text">{ this.tooltip }</span></div>
                 }
             </Fragment>
         );

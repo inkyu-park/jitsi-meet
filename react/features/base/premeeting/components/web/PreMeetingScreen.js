@@ -124,7 +124,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                                 { title }
                             </h1>
                             { children }
-                            { _buttons.length && <Toolbox toolbarButtons = { _buttons } /> }
+                            { _buttons.length && <Toolbox toolbarButtons = { _buttons } isPremeeting = { true } /> }
                             { skipPrejoinButton }
                             { showDeviceStatus && <DeviceStatus /> }
                         </div>

@@ -62,7 +62,8 @@ const INITIAL_STATE = {
      *
      * @type {boolean}
      */
-    visible: false
+    // visible: false
+    visible: true
 };
 
 ReducerRegistry.register(

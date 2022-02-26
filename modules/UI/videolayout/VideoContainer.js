@@ -55,10 +55,10 @@ function computeDesktopVideoSize( // eslint-disable-line max-params
 
     if (interfaceConfig.VERTICAL_FILMSTRIP) {
         // eslint-disable-next-line no-param-reassign
-        videoSpaceWidth -= Filmstrip.getVerticalFilmstripWidth();
+        // videoSpaceWidth -= Filmstrip.getVerticalFilmstripWidth();
     } else {
         // eslint-disable-next-line no-param-reassign
-        videoSpaceHeight -= Filmstrip.getFilmstripHeight();
+        // videoSpaceHeight -= Filmstrip.getFilmstripHeight();
     }
 
     if (availableWidth / aspectRatio >= videoSpaceHeight) {
@@ -341,9 +341,9 @@ export class VideoContainer extends LargeContainer {
 
         /* eslint-enable max-params */
         if (this.stream && this.isScreenSharing()) {
-            if (interfaceConfig.VERTICAL_FILMSTRIP) {
-                containerWidthToUse -= Filmstrip.getVerticalFilmstripWidth();
-            }
+            // if (interfaceConfig.VERTICAL_FILMSTRIP) {
+            //     containerWidthToUse -= Filmstrip.getVerticalFilmstripWidth();
+            // }
 
             return getCameraVideoPosition(width,
                 height,

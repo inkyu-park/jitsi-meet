@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React, { Component, Fragment } from 'react';
 
+import { Checkbox } from '@atlaskit/checkbox';
+
 import keyboardShortcut from '../../../../../modules/keyboardshortcut/keyboardshortcut';
 import {
     ACTION_SHORTCUT_TRIGGERED,
@@ -21,7 +23,8 @@ import {
     getLocalParticipant,
     hasRaisedHand,
     haveParticipantWithScreenSharingFeature,
-    raiseHand
+    raiseHand,
+    isLocalParticipantModerator
 } from '../../../base/participants';
 import { connect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
@@ -74,7 +77,8 @@ import {
     setFullScreen,
     setOverflowMenuVisible,
     setToolbarHovered,
-    showToolbox
+    showToolbox,
+    dockToolbox
 } from '../../actions';
 import { THRESHOLDS, NOT_APPLICABLE, DRAWER_MAX_HEIGHT, NOTIFY_CLICK_MODE } from '../../constants';
 import { isDesktopShareButtonDisabled, isToolboxVisible } from '../../functions';
@@ -264,6 +268,10 @@ type Props = {
      * Explicitly passed array with the buttons which this Toolbox should display.
      */
     toolbarButtons: Array<string>,
+
+    _isLocalParticipantModerator: boolean,
+
+    _isPremeeting: boolean
 
 };
 
@@ -1221,10 +1229,11 @@ class Toolbox extends Component<Props> {
     _showDesktopSharingButton() {
         const {
             _desktopSharingEnabled,
-            _desktopSharingDisabledTooltipKey
+            _desktopSharingDisabledTooltipKey,
+            _isLocalParticipantModerator
         } = this.props;
 
-        return _desktopSharingEnabled || _desktopSharingDisabledTooltipKey;
+        return (_desktopSharingEnabled || _desktopSharingDisabledTooltipKey) && _isLocalParticipantModerator;
     }
 
     /**
@@ -1260,6 +1269,7 @@ class Toolbox extends Component<Props> {
             _toolbarButtons,
             classes,
             showDominantSpeakerName,
+            _isPremeeting,
             t
         } = this.props;
 
@@ -1280,6 +1290,17 @@ class Toolbox extends Component<Props> {
 
                     { showDominantSpeakerName && <DominantSpeakerName /> }
 
+                    { !_isPremeeting && (<Checkbox
+                    defaultChecked = { true }
+                    size = 'large'
+                    label = { '버튼 고정하기' }
+                    name = 'dock-toolbox'
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onChange = {
+                        ({ target: { checked } }) =>
+                            //super._onChange({ followMeEnabled: checked })
+                            this.props.dispatch(dockToolbox(checked))
+                    } /> )}
                     <div className = 'toolbox-content-items'>
                         {mainMenuButtons.map(({ Content, key, ...rest }) => Content !== Separator && (
                             <Content
@@ -1371,7 +1392,7 @@ function _mapStateToProps(state, ownProps) {
         }
     }
 
-    let { toolbarButtons } = ownProps;
+    let { toolbarButtons, isPremeeting } = ownProps;
     const stateToolbarButtons = getToolbarButtons(state);
 
     if (toolbarButtons) {
@@ -1406,8 +1427,10 @@ function _mapStateToProps(state, ownProps) {
         _screenSharing: isScreenVideoShared(state),
         _tileViewEnabled: shouldDisplayTileView(state),
         _toolbarButtons: toolbarButtons,
+        _isPremeeting: isPremeeting,
         _virtualSource: state['features/virtual-background'].virtualSource,
-        _visible: isToolboxVisible(state)
+        _visible: isToolboxVisible(state),
+        _isLocalParticipantModerator: isLocalParticipantModerator(state)
     };
 }
 

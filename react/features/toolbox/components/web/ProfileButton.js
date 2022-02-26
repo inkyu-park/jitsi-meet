@@ -1,5 +1,6 @@
 // @flow
 
+import { stringify } from 'uuid';
 import { createToolbarEvent, sendAnalytics } from '../../../analytics';
 import { translate } from '../../../base/i18n';
 import { getLocalParticipant } from '../../../base/participants';
@@ -60,7 +61,8 @@ class ProfileButton extends AbstractButton<Props, *> {
             displayName = _defaultLocalDisplayName;
         }
 
-        return displayName;
+        // return displayName;
+        return "내 설정";
     }
 
     /**
@@ -76,7 +78,8 @@ class ProfileButton extends AbstractButton<Props, *> {
      * Retrieves the tooltip.
      */
     get tooltip() {
-        return this.label;
+        // return this.label;
+        return "내 설정";
     }
 
     /**

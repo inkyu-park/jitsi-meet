@@ -25,7 +25,7 @@ class RaiseHandButton extends AbstractButton<Props, *> {
     accessibilityLabel = 'toolbar.accessibilityLabel.raiseHand';
     icon = IconRaisedHand;
     label = 'toolbar.raiseHand';
-    toggledLabel = 'toolbar.raiseHand';
+    toggledLabel = 'toolbar.closeChat';
 
     /**
      * Retrieves tooltip dynamically.
