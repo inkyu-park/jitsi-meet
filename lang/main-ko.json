@@ -42,6 +42,25 @@
     "audioOnly": {
         "audioOnly": "음성 전용"
     },
+    "breakoutRooms": {
+        "actions": {
+            "add": "소교육실 추가",
+            "autoAssign": "무작위 교육실 할당",
+            "close": "닫기",
+            "join": "참여",
+            "leaveBreakoutRoom": "소교육실 나가기",
+            "more": "더보기",
+            "remove": "삭제",
+            "sendToBreakoutRoom": "참가자 교육실 이동:"
+        },
+        "defaultName": "소교육실 #{{index}}",
+        "mainRoom": "주교육실",
+        "notifications": {
+            "joined": "\"{{name}}\" 에 입장했습니다.",
+            "joinedMainRoom": "주교육실에 입장했습니다.",
+            "joinedTitle": "교육실 이동"
+        }
+    },
     "calendarSync": {
         "addMeetingURL": "회의 링크 추가",
         "confirmAddLink": "이 이벤트에 Jitsi 링크를 추가 하시겠습니까?",
@@ -73,6 +92,10 @@
         },
         "noMessagesMessage": "아직 회의에 메시지가 없습니다. 여기서 대화를 시작하세요!",
         "privateNotice": "{{recipient}}에게 보내는 비공개 메시지",
+        "tabs": {
+            "chat": "채팅",
+            "polls": "투표"
+        },
         "title": "채팅",
         "titleWithPolls": "채팅",
         "you": "본인"
@@ -209,6 +232,8 @@
         "externalInstallationTitle": "확장 프로그램이 필요합니다",
         "goToStore": "웹 스토어로 이동",
         "gracefulShutdown": "서비스는 현재 유지 관리를 위해 중단되었습니다. 나중에 다시 시도 해주십시오.",
+        "grantModeratorDialog": "{{participantName}}에게 관리자 권한을 부여하겠습니까?",
+        "grantModeratorTitle": "관리자 권한 부여",
         "incorrectPassword": "잘못된 사용자 이름 또는 비밀번호",
         "incorrectRoomLockPassword": "잘못된 비밀번호",
         "inlineInstallExtension": "지금 설치",
@@ -390,6 +415,7 @@
         "showSpeakerStats": "접속자 통계 표시",
         "toggleChat": "채팅 표시 또는 숨기기",
         "toggleFilmstrip": "동영상 표시 또는 숨기기",
+        "toggleParticipantsPane": "참가자목록 표시 또는 숨기기",
         "toggleScreensharing": "카메라와 화면 공유간에 전환",
         "toggleShortcuts": "도움말 메뉴 표시 또는 숨기기",
         "videoMute": "카메라 시작 또는 중지",
@@ -458,7 +484,7 @@
     "lockRoomPasswordUppercase": "비밀번호",
     "lonelyMeetingExperience": {
         "button": "초대하기",
-        "youAreAlone": "회의에 참여자가 없습니다."
+        "youAreAlone": "회의에 참가자가 없습니다."
     },
     "me": "나",
     "notify": {
@@ -494,8 +520,65 @@
         "videoMutedRemotelyDescription": "언제든지 카메라를 다시 켤 수 있습니다.",
         "videoMutedRemotelyTitle": "{{participantDisplayName}}에 의해 카메라가 비활성화되었습니다!"
     },
+    "participantsPane": {
+        "actions": {
+            "allow": "Allow attendees to:",
+            "allowVideo": "Allow video",
+            "askUnmute": "음소거 해제 요청",
+            "audioModeration": "Unmute themselves",
+            "blockEveryoneMicCamera": "Block everyone's mic and camera",
+            "invite": "초대하기",
+            "moreModerationActions": "관리자 옵션 더보기",
+            "moreModerationControls": "관리자 설정 더보기",
+            "moreParticipantOptions": "참가자 옵션 더보기",
+            "mute": "음소거",
+            "muteAll": "모두 음소거",
+            "muteEveryoneElse": "이 참가자 외 모두 음소거",
+            "stopEveryonesVideo": "모든 카메라 끄기",
+            "stopVideo": "카메라 끄기",
+            "unblockEveryoneMicCamera": "Unblock everyone's mic and camera",
+            "videoModeration": "Start their video"
+        },
+        "close": "Close",
+        "header": "Participants",
+        "headings": {
+            "lobby": "Lobby ({{count}})",
+            "participantsList": "Meeting participants ({{count}})",
+            "waitingLobby": "Waiting in lobby ({{count}})"
+        },
+        "search": "참가자 찾기"
+    },
     "passwordDigitsOnly": "최대 {{number}} 자리",
     "passwordSetRemotely": "다른 참가자가 설정",
+    "polls": {
+        "answer": {
+            "skip": "투표안함",
+            "submit": "제출"
+        },
+        "by": "By {{ name }}",
+        "create": {
+            "addOption": "보기 추가",
+            "answerPlaceholder": "보기 {{index}}",
+            "cancel": "취소",
+            "create": "투표 생성",
+            "pollOption": "보기 {{index}}",
+            "pollQuestion": "투표 내용",
+            "questionPlaceholder": "투표내용을 입력하세요",
+            "removeOption": "보기 제거",
+            "send": "생성"
+        },
+        "notification": {
+            "description": "투표해 주세요",
+            "title": "새로운 투표가 추가되었습니다."
+        },
+        "results": {
+            "changeVote": "투표 다시하기",
+            "empty": "진행중인 투표가 없습니다.",
+            "hideDetailedResults": "숨기기",
+            "showDetailedResults": "상세보기",
+            "vote": "Vote"
+        }
+    },
     "poweredby": "powered by",
     "prejoin": {
         "audioAndVideoError": "오디오 및 비디오 에러:",
@@ -684,6 +767,7 @@
             "document": "문서  전환",
             "feedback": "피드백 남기기",
             "fullScreen": "전체 화면 전환",
+            "grantModerator": "관리자 권한 부여",
             "hangup": "떠나기",
             "help": "도움말",
             "invite": "사용자 초대",
@@ -743,14 +827,21 @@
         "moreOptions": "옵션 더보기",
         "mute": "음소거",
         "muteEveryone": "모두 음소거",
+        "muteEveryonesVideo": "모든 카메라 비활성화",
         "openChat": "채팅 열기",
         "openReactionsMenu": "리액션",
-        "participants": "참여자",
+        "participants": "참가자",
         "pip": "",
         "privateMessage": "비공개 메시지 보내기",
         "profile": "프로필 수정",
         "raiseHand": "손들기",
         "raiseYourHand": "손 들어주세요",
+        "reactionBoo": "리액션(별로)",
+        "reactionClap": "리액션(박수)",
+        "reactionLaugh": "리액션(웃음)",
+        "reactionLike": "리액션(좋아요)",
+        "reactionSilence": "리액션(쉿)",
+        "reactionSurprised": "리액션(놀람)",
         "security": "보안 옵션",
         "selectBackground": "배경 선택",
         "shareRoom": "초대하기",
@@ -814,6 +905,7 @@
         "labelTooltipAudioOnly": "오디오 전용 모드 사용",
         "ld": "LD",
         "lowDefinition": "저해상도",
+        "performanceSettings": "품질 설정하기",
         "onlyAudioAvailable": "오디오만 사용할 수 있습니다",
         "onlyAudioSupported": "이 브라우저에서는 오디오만 지원합니다",
         "sd": "SD",
@@ -821,13 +913,18 @@
     },
     "videothumbnail": {
         "domute": "음소거",
+        "domuteOthers": "이 참가자 외 모두 음소거",
+        "domuteVideo": "카메라 비활성화",
+        "domuteVideoOfOthers": "이 참가자 외 모두 카메라 비활성화",
         "flip": "플립",
+        "grantModerator": "관리자 권한 부여",
         "kick": "내보내기",
         "moderator": "중재자",
         "mute": "참가자 음소거",
         "muted": "음소거됨",
         "remoteControl": "원격 제어",
         "show": "화면에 표시",
+        "videoMuted": "카메라 비활성화됨",
         "videomute": "참가자가 카메라를 중지했습니다."
     },
     "virtualBackground": {
