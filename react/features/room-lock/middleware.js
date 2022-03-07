@@ -22,6 +22,8 @@ import logger from './logger';
 
 declare var APP: Object;
 
+let passwordErrorCount = -1;
+
 /**
  * Middleware that captures conference failed and checks for password required
  * error and requests a dialog for user to enter password.
@@ -51,6 +53,7 @@ MiddlewareRegistry.register(store => next => action => {
         const currentLockedState = store.getState()['features/base/conference'].locked;
 
         if (currentLockedState === LOCKED_REMOTELY) {
+            APP.conference._writeLog('Password Changed');
             store.dispatch(
                 showNotification({
                     titleKey: 'notify.passwordSetRemotely'
@@ -84,6 +87,7 @@ MiddlewareRegistry.register(store => next => action => {
  * @returns {*}
  */
 function _conferenceJoined({ dispatch }, next, action) {
+    APP.conference._writeLog('Join Room');
     dispatch(hideDialog(PasswordRequiredPrompt));
 
     return next(action);
@@ -105,15 +109,19 @@ function _conferenceFailed({ dispatch }, next, action) {
     const { conference, error } = action;
 
     if (conference && error.name === JitsiConferenceErrors.PASSWORD_REQUIRED) {
+        passwordErrorCount++;
+
         // XXX The feature room-lock affords recovery after CONFERENCE_FAILED
         // caused by JitsiConferenceErrors.PASSWORD_REQUIRED.
         if (typeof error.recoverable === 'undefined') {
             error.recoverable = true;
         }
         if (error.recoverable) {
-            dispatch(_openPasswordRequiredPrompt(conference));
+            APP.conference._writeLog('Fail to Join. Password Required');
+            dispatch(_openPasswordRequiredPrompt(conference, passwordErrorCount));
         }
     } else {
+        passwordErrorCount = -1;
         dispatch(hideDialog(PasswordRequiredPrompt));
     }
 
@@ -133,6 +141,7 @@ function _conferenceFailed({ dispatch }, next, action) {
  * @returns {*}
  */
 function _setPasswordFailed(store, next, action) {
+    APP.conference._writeLog('Changing Password Failed');
     if (typeof APP !== 'undefined') {
         // TODO Remove this logic when displaying of error messages on web is
         // handled through react/redux.

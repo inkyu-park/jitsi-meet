@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { setPassword as setPass } from '../../../../base/conference';
 import { Dialog } from '../../../../base/dialog';
+import { translate } from '../../../../base/i18n';
 import { isLocalParticipantModerator } from '../../../../base/participants';
 import { connect } from '../../../../base/redux';
 import { E2EESection } from '../../../../e2ee/components';
@@ -12,11 +13,6 @@ import { LobbySection } from '../../../../lobby';
 import PasswordSection from './PasswordSection';
 
 type Props = {
-
-    /**
-     * Toolbar buttons which have their click exposed through the API.
-     */
-     _buttonsWithNotifyClick: Array<string | Object>,
 
     /**
      * Whether or not the current user can modify the current password.
@@ -53,7 +49,12 @@ type Props = {
     /**
      * Action that sets the conference password.
      */
-    setPassword: Function
+    setPassword: Function,
+
+    /**
+     * Invoked to obtain translated strings.
+     */
+    t: Function
 };
 
 /**
@@ -61,8 +62,7 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function SecurityDialog({
-    _buttonsWithNotifyClick,
+function CookieDialog({
     _canEditPassword,
     _conference,
     _locked,
@@ -81,27 +81,23 @@ function SecurityDialog({
 
     return (
         <Dialog
-            cancelDisabled = { !_locked }
-            cancelKey = { 'dialog.close' }
-            hideCancelButton = { true }
-            submitDisabled = { true }
-            titleKey = 'security.header'
+            //cancelKey = 'dialog.confirmNo'
+            cancelDisabled = { true }
+            okKey = 'dialog.confirmYes'
+            //onCancel = { this._onCancel }
+            onSubmit = { _onSubmit }
+            //titleKey = 'liveStreaming.start'
+            titleKey = "사용자 인증 실패"
             width = { 'small' }>
-            <div className = 'security-dialog'>
-                <LobbySection />
-                <PasswordSection
-                    buttonsWithNotifyClick = { _buttonsWithNotifyClick }
-                    canEditPassword = { _canEditPassword }
-                    conference = { _conference }
-                    locked = { _locked }
-                    password = { _password }
-                    passwordEditEnabled = { passwordEditEnabled }
-                    passwordNumberOfDigits = { _passwordNumberOfDigits }
-                    setPassword = { setPassword }
-                    setPasswordEditEnabled = { setPasswordEditEnabled } />
+            <div className = 'live-stream-dialog'>
+                교육 개설자는 반드시 포털을 통해 접속해야 합니다.<br/>정상적인 로그인 상태가 아니므로<br/>포털 재로그인 후 접속 하시기 바랍니다.
             </div>
         </Dialog>
     );
+}
+
+function _onSubmit() {
+    document.location.href = window.location.protocol + "//" + window.location.hostname;
 }
 
 /**
@@ -119,22 +115,20 @@ function mapStateToProps(state) {
         locked,
         password
     } = state['features/base/conference'];
-    const { roomPasswordNumberOfDigits, buttonsWithNotifyClick } = state['features/base/config'];
-
-    const showE2ee = Boolean(e2eeSupported) && isLocalParticipantModerator(state);
+    const { roomPasswordNumberOfDigits } = state['features/base/config'];
 
     return {
-        _buttonsWithNotifyClick: buttonsWithNotifyClick,
         _canEditPassword: isLocalParticipantModerator(state),
         _conference: conference,
         _dialIn: state['features/invite'],
         _locked: locked,
         _password: password,
         _passwordNumberOfDigits: roomPasswordNumberOfDigits,
-        _showE2ee: showE2ee
+        _showE2ee: Boolean(e2eeSupported)
     };
 }
 
 const mapDispatchToProps = { setPassword: setPass };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SecurityDialog);
+export default translate(connect(mapStateToProps, mapDispatchToProps)(CookieDialog));
+

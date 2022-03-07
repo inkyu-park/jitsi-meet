@@ -150,7 +150,13 @@ function PasswordSection({
             const { value } = formRef.current.querySelector('div > input');
 
             if (value) {
-                onPasswordSubmit(value);
+                // onPasswordSubmit(value);
+                if(value === password) {
+                    onTogglePasswordEditState();
+                }
+                else {
+                    onPasswordSubmit(value);
+                }
             }
         }
     }
@@ -245,35 +251,35 @@ function PasswordSection({
             return null;
         }
 
-        if (passwordEditEnabled) {
-            return (
-                <>
-                    <a
-                        aria-label = { t('dialog.Cancel') }
-                        onClick = { onTogglePasswordEditState }
-                        onKeyPress = { onTogglePasswordEditStateKeyPressHandler }
-                        role = 'button'
-                        tabIndex = { 0 }>{ t('dialog.Cancel') }</a>
-                    <a
-                        aria-label = { t('dialog.add') }
-                        onClick = { onPasswordSave }
-                        onKeyPress = { onPasswordSaveKeyPressHandler }
-                        role = 'button'
-                        tabIndex = { 0 }>{ t('dialog.add') }</a>
-                </>
-            );
-        }
+        // if (passwordEditEnabled) {
+        //     return (
+        //         <>
+        //             <a
+        //                 aria-label = { t('dialog.Cancel') }
+        //                 onClick = { onTogglePasswordEditState }
+        //                 onKeyPress = { onTogglePasswordEditStateKeyPressHandler }
+        //                 role = 'button'
+        //                 tabIndex = { 0 }>{ t('dialog.Cancel') }</a>
+        //             <a
+        //                 aria-label = { t('dialog.add') }
+        //                 onClick = { onPasswordSave }
+        //                 onKeyPress = { onPasswordSaveKeyPressHandler }
+        //                 role = 'button'
+        //                 tabIndex = { 0 }>{ t('dialog.add') }</a>
+        //         </>
+        //     );
+        // }
 
-        if (locked) {
+        if (locked&& !passwordEditEnabled) {
             return (
                 <>
                     <a
-                        aria-label = { t('dialog.Remove') }
+                        aria-label = { t('dialog.Modify') }
                         className = 'remove-password'
-                        onClick = { onPasswordRemove }
+                        onClick = { onTogglePasswordEditState }
                         onKeyPress = { onPasswordRemoveKeyPressHandler }
                         role = 'button'
-                        tabIndex = { 0 }>{ t('dialog.Remove') }</a>
+                        tabIndex = { 0 }>{ t('dialog.Modify') }</a>
                     {
 
                         // There are cases like lobby and grant moderator when password is not available
@@ -290,16 +296,29 @@ function PasswordSection({
                 </>
             );
         }
+        else {
+            setPasswordEditEnabled(true);
+            return (
+                <>
+                    <a
+                        aria-label = { t('dialog.Set') }
+                        onClick = { onPasswordSave }
+                        onKeyPress = { onPasswordSaveKeyPressHandler }
+                        role = 'button'
+                        tabIndex = { 0 }>{ t('dialog.Set') }</a>
+                </>
+            );
+        }
 
-        return (
-            <a
-                aria-label = { t('info.addPassword') }
-                className = 'add-password'
-                onClick = { onTogglePasswordEditState }
-                onKeyPress = { onTogglePasswordEditStateKeyPressHandler }
-                role = 'button'
-                tabIndex = { 0 }>{ t('info.addPassword') }</a>
-        );
+        // return (
+        //     <a
+        //         aria-label = { t('info.addPassword') }
+        //         className = 'add-password'
+        //         onClick = { onTogglePasswordEditState }
+        //         onKeyPress = { onTogglePasswordEditStateKeyPressHandler }
+        //         role = 'button'
+        //         tabIndex = { 0 }>{ t('info.addPassword') }</a>
+        // );
     }
 
     return (

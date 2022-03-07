@@ -26,6 +26,8 @@ type Props = {
      */
     dispatch: Dispatch<any>,
 
+    passwordErrorCount: number,
+
     /**
      * The translate function.
      */
@@ -81,6 +83,7 @@ class PasswordRequiredPrompt extends Component<Props, State> {
                 isModal = { false }
                 onCancel = { this._onCancel }
                 onSubmit = { this._onSubmit }
+                submitDisabled = { this.props.passwordErrorCount >= 5 }
                 titleKey = 'dialog.passwordRequired'
                 width = 'small'>
                 { this._renderBody() }
@@ -105,7 +108,9 @@ class PasswordRequiredPrompt extends Component<Props, State> {
                     onChange = { this._onPasswordChanged }
                     shouldFitContainer = { true }
                     type = 'password'
+                    disabled = { this.props.passwordErrorCount >= 5 }
                     value = { this.state.password } />
+                    <p class='description'>오류횟수 : {this.props.passwordErrorCount} { this.props.passwordErrorCount > 2 ? ' (5회 이상 틀리면 재접속이 필요합니다.)' : '' }</p>
             </div>
         );
     }

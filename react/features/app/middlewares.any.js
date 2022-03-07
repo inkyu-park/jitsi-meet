@@ -51,5 +51,6 @@ import '../transcribing/middleware';
 import '../video-layout/middleware';
 import '../video-quality/middleware';
 import '../videosipgw/middleware';
+import '../security/middleware';
 
 import './middleware';

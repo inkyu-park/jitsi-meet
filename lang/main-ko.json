@@ -187,8 +187,10 @@
         "Back": "뒤로가기",
         "Cancel": "취소",
         "IamHost": "내가 호스트",
+        "Modify": "수정",
         "Ok": "확인",
         "Remove": "제거",
+        "Set": "설정",
         "Share": "공유",
         "Submit": "제출",
         "WaitForHostMsg": "<b>{{room}}</b> 회의가 시작되지 않았습니다. 호스트인 경우 인증하십시오. 그렇지 않으면 호스트가 도착할 때까지 기다리십시오.",
@@ -688,8 +690,8 @@
         "pullToRefresh": "당겨서 새로고침"
     },
     "security": {
-        "about": "회의에 $t(lockRoomPassword)를 추가할 수 있습니다. 참가자는 회의에 참여하기 위해 $t(lockRoomPassword)를 입력해야합니다.",
-        "aboutReadOnly": "방장은 회의에 $t(lockRoomPassword)를 추가할 수 있습니다. 참가자는 회의에 참여하기 위해 $t(lockRoomPassword)를 입력해야합니다.",
+        "about": "교육에 $t(lockRoomPassword)를 설정해야 합니다. 참가자는 교육에 참여하기 위해 $t(lockRoomPassword)를 입력해야합니다.",
+        "aboutReadOnly": "방장은 교육에 $t(lockRoomPassword)를 설정해야 합니다. 참가자는 교육에 참여하기 위해 $t(lockRoomPassword)를 입력해야합니다.",
         "insecureRoomNameWarning": "원하지 않은 참가자가 회의에 참여할 수 있습니다. 보안 옵션 버튼을 통해 회의를 보호하는 것을 고려하십시오.",
         "securityOptions": "보안 옵션"
     },

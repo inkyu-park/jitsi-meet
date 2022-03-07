@@ -60,19 +60,19 @@ type State = {
  * @augments Component
  */
 class PasswordForm extends Component<Props, State> {
-    /**
-     * Implements React's {@link Component#getDerivedStateFromProps()}.
-     *
-     * @inheritdoc
-     */
-    static getDerivedStateFromProps(props, state) {
-        return {
-            enteredPassword: props.editEnabled ? state.enteredPassword : ''
-        };
-    }
+    // /**
+    //  * Implements React's {@link Component#getDerivedStateFromProps()}.
+    //  *
+    //  * @inheritdoc
+    //  */
+    // static getDerivedStateFromProps(props, state) {
+    //     return {
+    //         enteredPassword: props.editEnabled ? state.enteredPassword : ''
+    //     };
+    // }
 
     state = {
-        enteredPassword: ''
+        enteredPassword: this.props.password
     };
 
     /**
@@ -87,6 +87,7 @@ class PasswordForm extends Component<Props, State> {
         // Bind event handlers so they are only bound once per instance.
         this._onEnteredPasswordChange = this._onEnteredPasswordChange.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
+        this.state.enteredPassword = this.props.password;
     }
 
     /**

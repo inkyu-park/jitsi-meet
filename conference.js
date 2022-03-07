@@ -99,7 +99,8 @@ import {
     participantPresenceChanged,
     participantRoleChanged,
     participantUpdated,
-    updateRemoteParticipantFeatures
+    updateRemoteParticipantFeatures,
+    getParticipantCount
 } from './react/features/base/participants';
 import {
     getUserSelectedCameraDeviceId,
@@ -121,6 +122,7 @@ import {
     trackRemoved
 } from './react/features/base/tracks';
 import { downloadJSON } from './react/features/base/util/downloadJSON';
+import { safeDecodeURIComponent } from './react/features/base/util/uri';
 import { showDesktopPicker } from './react/features/desktop-picker';
 import { appendSuffix } from './react/features/display-name';
 import {
@@ -149,6 +151,7 @@ import { AudioMixerEffect } from './react/features/stream-effects/audio-mixer/Au
 import { createPresenterEffect } from './react/features/stream-effects/presenter';
 import { createRnnoiseProcessor } from './react/features/stream-effects/rnnoise';
 import { endpointMessageReceived } from './react/features/subtitles';
+import { authenticateAccount } from './react/features/security/actions';
 import UIEvents from './service/UI/UIEvents';
 
 const logger = Logger.getLogger(__filename);
@@ -184,6 +187,9 @@ let _onConnectionPromiseCreated;
  * @private
  */
 let _prevMutePresenterVideo = Promise.resolve();
+
+// let _isValidCookie;
+let stfNo;
 
 /*
  * Logic to open a desktop picker put on the window global for
@@ -823,6 +829,9 @@ export default {
             if (_onConnectionPromiseCreated) {
                 _onConnectionPromiseCreated();
             }
+
+            // SSO 쿠키 체크결과를 특정 변수에 저장해놓음
+            // _isValidCookie = await this._checkValidCookie();
 
             APP.store.dispatch(makePrecallTest(this._getConferenceOptions()));
 
@@ -1535,6 +1544,10 @@ export default {
         return Boolean(APP.store.getState()['features/base/audio-only'].enabled);
     },
 
+    // isValidCookie() {
+    //     return _isValidCookie;
+    // },
+
     videoSwitchInProgress: false,
 
     /**
@@ -2104,6 +2117,11 @@ export default {
 
                 APP.store.dispatch(localParticipantRoleChanged(role));
                 APP.API.notifyUserRoleChanged(id, role);
+                
+                this._writeLog("Role Changed");
+                if(role === "moderator" && getParticipantCount(APP.store.getState()) === 1) {
+                    APP.store.dispatch(authenticateAccount());
+                }
             } else {
                 APP.store.dispatch(participantRoleChanged(id, role));
             }
@@ -2573,6 +2591,30 @@ export default {
                 this.toggleScreenSharing(enabled, { audioOnly }, ignoreDidHaveVideo);
             }
         );
+    },
+
+    async _writeLog(msg) {
+
+        const localParticipant = getLocalParticipant(APP.store.getState());
+        const response = await fetch("/api/v1/log/audit", {
+            method: "PUT",
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                roomName: safeDecodeURIComponent(APP.conference.roomName),
+                nickname: localParticipant.name,
+                role: localParticipant.role,
+                logTitle: msg
+            })
+        });
+        const status = response.status;
+        if(status === 200) {
+            return true;
+        }
+        else {
+            return false;
+        }
     },
 
     /**

@@ -95,8 +95,8 @@ export function endRoomLockRequest(
  *     props: PropTypes
  * }}
  */
-export function _openPasswordRequiredPrompt(conference: Object) {
-    return openDialog(PasswordRequiredPrompt, { conference });
+export function _openPasswordRequiredPrompt(conference: Object, passwordErrorCount: number) {
+    return openDialog(PasswordRequiredPrompt, { conference, passwordErrorCount });
 }
 
 /**
