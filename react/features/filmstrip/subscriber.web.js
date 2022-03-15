@@ -123,7 +123,7 @@ StateListenerRegistry.register(
         const { disableFilmstripAutohiding } = state['features/base/config'];
 
         if (!disableFilmstripAutohiding) {
-            store.dispatch(setFilmstripVisible(!widthBelowThreshold));
+            //store.dispatch(setFilmstripVisible(!widthBelowThreshold));
         }
     });
 
